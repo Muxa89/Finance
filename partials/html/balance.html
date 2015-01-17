@@ -1,0 +1,122 @@
+<div>
+  <link ng-href="partials/css/balance.css" type="text/css" rel="stylesheet" />
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 col-md-3" id="datepicker-container">
+        <input type="text" id="datepicker" class="form-control visible-xs-block" />
+        <div id="datepicker-md" class="hidden-xs"></div>
+      </div>
+      <div class="col-sm-8 col-md-6">
+        <div class="container-fluid" id="form-container">
+          <div class="row">
+            <!-- Категория платежа -->
+            <div class="dropdown col-sm-4">
+              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown">
+                {{selectedCategory.name}}
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="categoryDd">
+                <li ng-repeat="category in categories" role="presentation" ng-click="categorySelected(category)">
+                  <a role="menuitem" tabindex="-1">{{category.name}}</a>
+                </li>
+              </ul>
+            </div>
+            <!-- Основной счет -->
+            <div class="dropdown col-sm-4">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown">
+                Счет
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="accountName1">
+                <li ng-repeat="account in accounts" role="presentation"><a role="menuitem" tabindex="-1" href="#">{{account}}</a></li>
+              </ul>
+            </div>
+            <!-- Дополнительный счет -->
+            <div class="dropdown col-sm-4 hidden">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown">
+                Счет
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="accountName2">
+                <li ng-repeat="account in accounts" role="presentation"><a role="menuitem" tabindex="-1" href="#">{{account}}</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Описание операции -->
+          <div class="row">
+            <div class="col-sm-12">
+              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" />
+            </div>
+          </div>
+          <!-- Сумма -->
+          <div class="row">
+            <div class="col-sm-12">
+              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" />
+            </div>
+          </div>
+          <!-- Кнопки CRUD -->
+          <div class="row">
+            <div class="col-sm-4">
+              <button type="button" class="btn btn-success">Добавить</button>
+            </div>
+            <div class="col-sm-4 hidden">
+              <button type="button" class="btn btn-warning">Изменить</button>
+            </div>
+            <div class="col-sm-4 hidden">
+              <button type="button" class="btn btn-danger">Удалить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Таблица счетов -->
+      <div class="hidden-xs hidden-sm col-md-3" id="accountTable">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Счет</th>
+              <th>Остаток</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="account in accounts">
+              <td>{{account}}</td>
+              <td>{{getAccountState(account)}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>Категория</th>
+              <th>Описание</th>
+              <th>Счет</th>
+              <th>Сумма</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="entry in entries">
+              <td>{{entry.category.name}}</td>
+              <td>{{entry.description}}</td>
+              <td>{{entry.account}}</td>
+              <td>{{entry.sum}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <button type="button" class="btn btn-primary" style="width:100%">Загрузить еще</button>
+      </div>
+    </div>
+  </div>
+</div>

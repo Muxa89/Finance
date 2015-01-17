@@ -1,0 +1,25 @@
+#datepicker {
+  text-align: center;
+}
+#datepicker-md .datepicker-inline {
+  width: 100%;
+}
+#datepicker-md .table-condensed {
+  width: 100%;
+}
+#form-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+/*Не сделано с помощью col-xs-12 потому что иначе перестает отрисовываться в нужном 
+положении дропдаун*/
+#form-container button {
+  width: 100%;
+}
+#form-container button, #form-container input, #datepicker-container>*{
+  margin-bottom: 15px;
+}
+#form-container ul {
+  margin-top: -15px;
+  margin-left: 15px;
+}

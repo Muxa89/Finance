@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Табличка-приложение</title>
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css">
+	<link rel="stylesheet" type="text/css" href="css/datepicker3.css">
+	<style type="text/css">
+		#datepicker {
+			text-align: center;
+		}
+		#datepicker-md .datepicker-inline {
+			width: 100%;
+		}
+		#datepicker-md .table-condensed {
+			width: 100%;
+		}
+	  /*Не сделано с помощью col-xs-12 потому что иначе перестает отрисовываться в нужном 
+	  положении дропдаун*/
+	  #form-container button, #form-container input {
+	  	width: 100%;
+	  }
+	  #form-container button, #form-container input, #datepicker-container>*{
+	  	margin-bottom: 15px;
+	  }
+	  #form-container ul {
+	  	margin-top: -15px;
+	  	margin-left: 15px;
+	  }
+  </style>
+</head>
+<body>
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Табличка-приложение</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="balance.html">Баланс</a></li>
+					<li class="active"><a href="#">Счета</a></li>
+					<li class="disabled"><a href="#">Операции</a></li>
+					<li class="disabled"><a href="#">Статистика</a></li>
+					<li class="disabled"><a href="#">Долги</a></li>
+				</ul>
+				<div class="navbar-right navbar-text">
+					Добро пожаловать, <a href="" class="navbar-link">Михаил</a>
+				</div>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 col-sm-push-4 col-md-6 col-md-push-4 col-md-offset-1">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Счет</th>
+							<th>Остаток</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Кошелек</td>
+							<td>1000</td>
+						</tr>
+						<tr>
+							<td>Карта</td>
+							<td>10000</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-4 col-sm-pull-8 col-md-4 col-md-pull-6 container-fluid" id="form-container">
+				<div class="row">
+					<div class="col-xs-12">
+						<input type="text" class="form-control" placeholder="Название счета">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="button" class="btn btn-success">Добавить</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="button" class="btn btn-warning">Корректировать</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="button" class="btn btn-danger">Удалить</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Категория</th>
+							<th>Описание</th>
+							<th>Сумма</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Еда</td>
+							<td>Столовая</td>
+							<td>-100</td>
+						</tr>
+						<tr>
+							<td>Транспорт</td>
+							<td></td>
+							<td>-40</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
