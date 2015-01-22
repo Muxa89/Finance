@@ -23,3 +23,6 @@
   margin-top: -15px;
   margin-left: 15px;
 }
+a[role="menuitem"] {
+	cursor: pointer;
+}

@@ -62,7 +62,14 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
     return accountStates[account];
   }
 
-  $scope.categorySelected = function(category, event) {
+  $scope.categoryKeydown = function (category, $event) {
+    if ($event.which == 13) {
+      $scope.categorySelected(category);
+    }
+  }
+
+  $scope.categorySelected = function(category){
     $scope.selectedCategory = category;
+    $("#categoryDd").dropdown('toggle');
   }
 }]);

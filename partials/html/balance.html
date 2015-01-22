@@ -12,19 +12,20 @@
           <div class="row">
             <!-- Категория платежа -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="5">
                 {{selectedCategory.name}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="categoryDd">
-                <li ng-repeat="category in categories" role="presentation" ng-click="categorySelected(category)">
-                  <a role="menuitem" tabindex="-1">{{category.name}}</a>
+                <!-- <li role="presentation" class="dropdown-header">{{categoryFilter}}</li> -->
+                <li ng-repeat="category in categories" role="presentation" ng-keydown="categoryKeydown(category, $event)" ng-click="categorySelected(category)">
+                  <a role="menuitem" tabindex="6">{{category.name}}</a>
                 </li>
               </ul>
             </div>
             <!-- Основной счет -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="7">
                 Счет
                 <span class="caret"></span>
               </button>
