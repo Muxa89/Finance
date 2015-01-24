@@ -41,6 +41,12 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
   var emptyCategory = new Category('Категория', '', '');
   $scope.selectedCategory = emptyCategory;
 
+  var emptyAccount = 'Счет';
+  $scope.selectedAcc1 = emptyAccount;  
+  $scope.selectedAcc2 = emptyAccount;  
+
+  $('#accountName2').parent().addClass('hidden');
+
   $scope.entries = [
     new Entry(new Category('Еда', 'green', false), 'Столовая', 'Кошелек', '-100'),
     new Entry(new Category('Транспорт', 'yellow', false), 'Кошелек', '', '-40')
@@ -62,14 +68,21 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
     return accountStates[account];
   }
 
-  $scope.categoryKeydown = function (category, $event) {
-    if ($event.which == 13) {
-      $scope.categorySelected(category);
+  $scope.categorySelected = function(category){
+    $scope.selectedCategory = category;
+
+    if (category.name == 'Перевод') {
+      $('#accountName2').parent().removeClass('hidden');
+    } else {
+      $('#accountName2').parent().addClass('hidden');
     }
   }
 
-  $scope.categorySelected = function(category){
-    $scope.selectedCategory = category;
-    $("#categoryDd").dropdown('toggle');
+  $scope.account1Selected = function (account) {
+    $scope.selectedAcc1 = account;
+  }
+
+  $scope.account2Selected = function (account) {
+    $scope.selectedAcc2 = account;
   }
 }]);

@@ -17,8 +17,7 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="categoryDd">
-                <!-- <li role="presentation" class="dropdown-header">{{categoryFilter}}</li> -->
-                <li ng-repeat="category in categories" role="presentation" ng-keydown="categoryKeydown(category, $event)" ng-click="categorySelected(category)">
+                <li ng-repeat="category in categories" role="presentation" fin-select="categorySelected(category)">
                   <a role="menuitem" tabindex="6">{{category.name}}</a>
                 </li>
               </ul>
@@ -26,21 +25,25 @@
             <!-- Основной счет -->
             <div class="dropdown col-sm-4">
               <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="7">
-                Счет
+                {{selectedAcc1}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName1">
-                <li ng-repeat="account in accounts" role="presentation"><a role="menuitem" tabindex="-1" href="#">{{account}}</a></li>
+                <li ng-repeat="account in accounts" role="presentation" fin-select="account1Selected(account)">
+                  <a role="menuitem" tabindex="8">{{account}}</a>
+                </li>
               </ul>
             </div>
             <!-- Дополнительный счет -->
-            <div class="dropdown col-sm-4 hidden">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown">
-                Счет
+            <div class="dropdown col-sm-4">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="9">
+                {{selectedAcc2}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName2">
-                <li ng-repeat="account in accounts" role="presentation"><a role="menuitem" tabindex="-1" href="#">{{account}}</a></li>
+                <li ng-repeat="account in accounts" role="presentation" fin-select="account2Selected(account)">
+                  <a role="menuitem" tabindex="10">{{account}}</a>
+                </li>
               </ul>
             </div>
           </div>
