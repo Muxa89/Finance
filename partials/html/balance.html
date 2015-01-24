@@ -12,37 +12,37 @@
           <div class="row">
             <!-- Категория платежа -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="5">
+              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="1">
                 {{selectedCategory.name}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="categoryDd">
                 <li ng-repeat="category in categories" role="presentation" fin-select="categorySelected(category)">
-                  <a role="menuitem" tabindex="6">{{category.name}}</a>
+                  <a role="menuitem" tabindex="2">{{category.name}}</a>
                 </li>
               </ul>
             </div>
             <!-- Основной счет -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="7">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="3">
                 {{selectedAcc1}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName1">
                 <li ng-repeat="account in accounts" role="presentation" fin-select="account1Selected(account)">
-                  <a role="menuitem" tabindex="8">{{account}}</a>
+                  <a role="menuitem" tabindex="4">{{account}}</a>
                 </li>
               </ul>
             </div>
             <!-- Дополнительный счет -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="9">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="5">
                 {{selectedAcc2}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName2">
                 <li ng-repeat="account in accounts | filter : notEqualAcc1" role="presentation" fin-select="account2Selected(account)">
-                  <a role="menuitem" tabindex="10">{{account}}</a>
+                  <a role="menuitem" tabindex="6">{{account}}</a>
                 </li>
               </ul>
             </div>
@@ -51,25 +51,25 @@
           <!-- Описание операции -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" />
+              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7"/>
             </div>
           </div>
           <!-- Сумма -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" />
+              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8"/>
             </div>
           </div>
           <!-- Кнопки CRUD -->
           <div class="row">
             <div class="col-sm-4">
-              <button type="button" class="btn btn-success">Добавить</button>
+              <button type="button" class="btn btn-success" tabindex="9">Добавить</button>
             </div>
             <div class="col-sm-4 hidden">
-              <button type="button" class="btn btn-warning">Изменить</button>
+              <button type="button" class="btn btn-warning" tabindex="10">Изменить</button>
             </div>
             <div class="col-sm-4 hidden">
-              <button type="button" class="btn btn-danger">Удалить</button>
+              <button type="button" class="btn btn-danger" tabindex="11">Удалить</button>
             </div>
           </div>
         </div>
