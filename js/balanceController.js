@@ -52,17 +52,32 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
     new Entry(new Category('Транспорт', 'yellow', false), 'Кошелек', '', '-40')
   ];
 
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+
+  var yyyy = today.getFullYear();
+  if(dd<10){
+      dd='0'+dd
+  } 
+  if(mm<10){
+      mm='0'+mm
+  } 
+  var today = dd+'-'+mm+'-'+yyyy;
+
   $('#datepicker-md').datepicker({
     format: "dd/mm/yyyy",
-    todayBtn: true
+    todayBtn: "linked"
   });
+  $('#datepicker-md').datepicker('update', today);
 
   $('#datepicker').datepicker({
     format: "dd/mm/yyyy",
-    todayBtn: true,
+    todayBtn: "linked",
     orientation: "top left",
     autoclose: true
   });
+  $('#datepicker').datepicker('update', today);
 
   $scope.getAccountState = function(account){  
     return accountStates[account];
@@ -70,7 +85,6 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
 
   $scope.categorySelected = function(category){
     $scope.selectedCategory = category;
-
     if (category.name == 'Перевод') {
       $('#accountName2').parent().removeClass('hidden');
     } else {
@@ -80,9 +94,16 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
 
   $scope.account1Selected = function (account) {
     $scope.selectedAcc1 = account;
+    if ($scope.selectedAcc1 == $scope.selectedAcc2) {
+      $scope.selectedAcc2 = emptyAccount;
+    }
   }
 
   $scope.account2Selected = function (account) {
     $scope.selectedAcc2 = account;
+  }
+
+  $scope.notEqualAcc1 = function (account) {
+    return account != $scope.selectedAcc1;
   }
 }]);

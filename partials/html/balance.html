@@ -41,7 +41,7 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName2">
-                <li ng-repeat="account in accounts" role="presentation" fin-select="account2Selected(account)">
+                <li ng-repeat="account in accounts | filter : notEqualAcc1" role="presentation" fin-select="account2Selected(account)">
                   <a role="menuitem" tabindex="10">{{account}}</a>
                 </li>
               </ul>
