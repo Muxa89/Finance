@@ -1,9 +1,10 @@
 var financeApp = angular.module('financeApp');
 
-function Entry (category, description, account, sum) {
+function Entry (category, description, acc1, acc2, sum) {
   this.category = category;
+  this.acc1 = acc1;
+  this.acc2 = acc2;
   this.description = description;
-  this.account = account;
   this.sum = sum;
 }
 
@@ -11,6 +12,22 @@ function Category (name, color, isSpecial) {
   this.name = name;
   this.color = color; 
   this.isSpecial = isSpecial;
+}
+
+function AccountStore () {
+  this.accounts = {};
+
+  AccountStore.addAccount = function (name, startState) {
+    accounts[name] = startState;
+  }
+ 
+  AccountStore.addAccount('Карточка', 0);
+  AccountStore.addAccount('Кошелек', 0);
+  AccountStore.addAccount('Домашние наличные', 0);
+
+  AccountStore.getAccounts = function () {
+    return accounts;
+  }
 }
 
 Category.loadSpecialCategories = function() {
@@ -21,21 +38,51 @@ Category.loadSpecialCategories = function() {
   ];
 }
 
+Category.getCategoryByName = function (name) {
+  if (!Category.categoriesLoaded) loadCategories();
+  return Category[name];
+}
+
 function loadCategories() {
-  return [
+  var allCategories = [
     new Category('Еда', 'green', false),
     new Category('Медицина', 'red', false),
     new Category('Квартира', 'blue', false),
     new Category('Транспорт', 'yellow', false)
   ].concat(Category.loadSpecialCategories());
+  for (var i = 0; i < allCategories.length; i++) {
+    Category[allCategories[i].name] = allCategories[i];
+  }
+  Category.categoriesLoaded = true;
+  return allCategories;
 }
 
-financeApp.controller('BalanceController' , ['$scope', function ($scope) {
-  accountStates = {'Карточка':1000, 'Кошелек':2000, 'Домашние наличные':3000};
-  $scope.accounts = [];
-  for (var name in accountStates) {
-    $scope.accounts.push(name);
+function loadAccounts () {
+  
+}
+
+function getRandomIntNumber (max, min) {
+  if (!min) min = 0;
+  return min + Math.round(Math.random()*max);
+}
+
+function loadEntries (amount) {
+  var result = [];
+  var categories = loadCategories();
+  for (var i = 0; i < amount; i++) {
+    // result.push(new Entry(
+    //   categories[getRandomIntNumber(categories.length)]
+
+    // ));
   }
+  return result;
+}
+
+financeApp.controller('BalanceController', ['$scope', 'entryService', function ($scope, entryService) {
+  $scope.accounts = ["Кошелек", "Карта", "Домашние наличные"];
+  // for (var name in AccountStore.getAccounts()) {
+  //   $scope.accounts.push(name);
+  // }
 
   $scope.categories = loadCategories();
   var emptyCategory = new Category('Категория', '', '');
@@ -80,7 +127,7 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
   $('#datepicker').datepicker('update', today);
 
   $scope.getAccountState = function(account){  
-    return accountStates[account];
+    return 100;
   }
 
   $scope.categorySelected = function(category){
@@ -105,5 +152,9 @@ financeApp.controller('BalanceController' , ['$scope', function ($scope) {
 
   $scope.notEqualAcc1 = function (account) {
     return account != $scope.selectedAcc1;
+  }
+
+  $scope.addEntry = function () {
+    entryService.add($('#datepicker').val(), $scope.selectedCategory.name, $scope.selectedAcc1, $scope.selectedAcc2, $scope.description, $scope.sum);
   }
 }]);

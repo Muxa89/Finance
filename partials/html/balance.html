@@ -51,19 +51,19 @@
           <!-- Описание операции -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7"/>
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7" ng-model="description"/>
             </div>
           </div>
           <!-- Сумма -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8"/>
+              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8" ng-model="sum"/>
             </div>
           </div>
           <!-- Кнопки CRUD -->
           <div class="row">
             <div class="col-sm-4">
-              <button type="button" class="btn btn-success" tabindex="9">Добавить</button>
+              <button type="button" class="btn btn-success" tabindex="9" ng-click="addEntry()">Добавить</button>
             </div>
             <div class="col-sm-4 hidden">
               <button type="button" class="btn btn-warning" tabindex="10">Изменить</button>
