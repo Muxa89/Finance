@@ -79,6 +79,42 @@ function loadEntries (amount) {
 }
 
 financeApp.controller('BalanceController', ['$scope', 'entryService', function ($scope, entryService) {
+  (function init () {
+    // Datepicker init
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+  
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+    var today = dd+'-'+mm+'-'+yyyy;
+
+    $('#datepicker-md').datepicker({
+      format: "dd/mm/yyyy",
+      todayBtn: "linked"
+    });
+    $('#datepicker-md').datepicker('update', today);
+
+    $('#datepicker').datepicker({
+      format: "dd/mm/yyyy",
+      todayBtn: "linked",
+      orientation: "top left",
+      autoclose: true
+    });
+    $('#datepicker').datepicker('update', today);
+
+    // Тестовые записи
+    entryService.add(today, "Еда", "Кошелек", "", "Столовая", -100);
+    entryService.add(today, "Перевод", "Зп карточка", "Кошелек", "", -200);
+    entryService.add(today, "Транспорт", "Кошелек", "", "", -20);
+  })();
+
   $scope.accounts = ["Кошелек", "Карта", "Домашние наличные"];
   // for (var name in AccountStore.getAccounts()) {
   //   $scope.accounts.push(name);
@@ -94,37 +130,14 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
 
   $('#accountName2').parent().addClass('hidden');
 
-  $scope.entries = [
-    new Entry(new Category('Еда', 'green', false), 'Столовая', 'Кошелек', '-100'),
-    new Entry(new Category('Транспорт', 'yellow', false), 'Кошелек', '', '-40')
-  ];
+  // $scope.entries = [
+  //   new Entry(new Category('Еда', 'green', false), 'Столовая', 'Кошелек', '-100'),
+  //   new Entry(new Category('Транспорт', 'yellow', false), 'Кошелек', '', '-40')
+  // ];
+  $scope.entries = entryService.get();
 
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
 
-  var yyyy = today.getFullYear();
-  if(dd<10){
-      dd='0'+dd
-  } 
-  if(mm<10){
-      mm='0'+mm
-  } 
-  var today = dd+'-'+mm+'-'+yyyy;
 
-  $('#datepicker-md').datepicker({
-    format: "dd/mm/yyyy",
-    todayBtn: "linked"
-  });
-  $('#datepicker-md').datepicker('update', today);
-
-  $('#datepicker').datepicker({
-    format: "dd/mm/yyyy",
-    todayBtn: "linked",
-    orientation: "top left",
-    autoclose: true
-  });
-  $('#datepicker').datepicker('update', today);
 
   $scope.getAccountState = function(account){  
     return 100;
@@ -156,5 +169,22 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
 
   $scope.addEntry = function () {
     entryService.add($('#datepicker').val(), $scope.selectedCategory.name, $scope.selectedAcc1, $scope.selectedAcc2, $scope.description, $scope.sum);
+    refreshTable();
+  }
+
+  $scope.selectEntry = function (entry, event) {
+    clearSelection();
+    entry.selected = true;
+  }
+
+  function clearSelection () {
+    $(".entry-table-row").removeClass("selected");
+    for (var i = 0; i < $scope.entries.length; i++) {
+      $scope.entries[i].selected = false;
+    };
+  }
+
+  function refreshTable () {
+    $scope.entries = entryService.get();
   }
 }]);

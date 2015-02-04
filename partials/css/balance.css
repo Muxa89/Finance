@@ -26,3 +26,9 @@
 a[role="menuitem"] {
 	cursor: pointer;
 }
+.entry-table-row{
+  cursor: pointer;
+}
+.selected {
+  background-color: #7DC0FA !important;
+}

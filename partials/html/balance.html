@@ -97,7 +97,7 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
-        <table class="table table-condensed">
+        <table class="table table-condensed table-hover">
           <thead>
             <tr>
               <th>Категория</th>
@@ -107,10 +107,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="entry in entries">
-              <td>{{entry.category.name}}</td>
+            <tr ng-repeat="entry in entries" class="entry-table-row" ng-click="selectEntry(entry)" ng-class="{selected : entry.selected}">
+              <td>{{entry.category}}</td>
               <td>{{entry.description}}</td>
-              <td>{{entry.account}}</td>
+              <td>{{entry.acc1}}  <span ng-show="entry.acc2" class="glyphicon glyphicon-arrow-right"></span>  {{entry.acc2}}</td>
               <td>{{entry.sum}}</td>
             </tr>
           </tbody>
