@@ -95,7 +95,7 @@ function createEntityManager (idGenerator) {
   };
 
   function getEntities (filter) {
-    if (isEmpty(filter)) return storage;
+    if (!filter || isEmpty(filter)) return getArrayClone(storage);
 
     var result = [];
     for (var i = 0; i < storage.length; i++) {
@@ -112,6 +112,18 @@ function createEntityManager (idGenerator) {
       }
     };
     if (result.length == 1) return result[0];
+    return getArrayClone(result);
+  }
+
+  function getArrayClone (array) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+      if ('clone' in array[i]) {
+        result[i] = array[i].clone();
+      } else {
+        result[i] = array[i];
+      }
+    };
     return result;
   }
   
@@ -143,5 +155,3 @@ Array.prototype.remove = function() {
   }
   return this;
 };
-
-

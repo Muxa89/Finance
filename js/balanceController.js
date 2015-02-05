@@ -53,7 +53,7 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', 'categoryS
 
     // Инициализация коллекций и текущих выбранных элементов
 
-    $scope.entries = entryService.get();
+    $scope.entries = entryService.get({date:today});
     $scope.selectedEntry = entryService.getEmptyEntry().clone();
 
     $scope.categories = categoryService.get();
@@ -64,14 +64,17 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', 'categoryS
     $scope.selectedAcc2 = accountsService.getEmptyAccount();  
   })();
 
-  $scope.getAccountState = function(account){  
-    return 100;
-  }
+  var transferCategory = categoryService.get({name:"Перевод"});
 
   $scope.categorySelected = function(category){
     $scope.selectedEntry.category = category;
-    $scope.acc2Visible = (category.name == 'Перевод');
-    //if ($scope.selectedEntry.id != -1) $scope.entryModified = true;
+    $scope.acc2Visible = transferCategory.equals(category);
+    if ($scope.acc2Visible) {
+      $scope.selectedEntry.acc2 = accountsService.getEmptyAccount();
+    } else {
+      $scope.selectedEntry.acc2 = null;
+    }
+    $scope.setEntryModified(true);
   }
 
   $scope.account1Selected = function (account) {
@@ -79,37 +82,57 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', 'categoryS
     if ($scope.selectedAcc1 == $scope.selectedAcc2) {
       $scope.selectedAcc2 = accountsService.getEmptyAccount();
     }
+    $scope.setEntryModified(true);
   }
 
   $scope.account2Selected = function (account) {
-    $scope.selectedAcc2 = account;
+    $scope.selectedEntry.acc2 = account;
+    $scope.setEntryModified(true);
   }
 
   $scope.notEqualAcc1 = function (account) {
-    return account != $scope.selectedAcc1;
+    return !account.equals($scope.selectedEntry.acc1);
   }
 
   $scope.addEntry = function () {
-    if ($scope.selectedEntry.equals(entryService.getEmptyEntry())) return;
+    if (entryService.getEmptyEntry().clone().equals($scope.selectedEntry)) return;
     $scope.selectedEntry.date = $('#datepicker').val();
     entryService.add($scope.selectedEntry);
     refreshTable();
+    
+    $scope.selectedEntry = entryService.getEmptyEntry().clone();
+    $scope.setEntryModified(false);
+    setFocusOnStartElement();
   }
 
   $scope.selectEntry = function (entry) {
     clearSelection();
     if (entry) {
       entry.selected = true;
-      fillForm(entry);
-      showEditAndDeleteButtons(true);
+      $scope.selectedEntry = entry;
+      $scope.acc2Visible = transferCategory.equals(entry.category);
+      $scope.isEditButtonsVisible = true;
+    } else {
+      $scope.selectedEntry = entryService.getEmptyEntry.clone();
     }
-    $scope.selectedEntry = entry;
-    $scope.entryModified = false;
+    $scope.setEntryModified(false);
   }
 
-  $scope.editEntry = function (entry) {
-    lockForm(false);
+  $scope.deleteEntry = function () {
+    if ($scope.selectedEntry.id != -1) {
+      entryService.delete($scope.selectedEntry.id);
+    }
+    refreshTable();
+    clearSelection();
 
+    $scope.selectedEntry = entryService.getEmptyEntry().clone();
+    $scope.setEntryModified(false);
+    setFocusOnStartElement();
+  }
+
+  $scope.cancelChanges = function () {
+    refreshTable();
+    $scope.selectEntry(entryService.get({id:$scope.selectedEntry.id}));
   }
 
   function clearSelection () {
@@ -122,23 +145,11 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', 'categoryS
     $scope.entries = entryService.get();
   }
 
-  function fillForm (entry) {
-    $scope.categorySelected({name : entry.category});
-    $scope.selectedAcc1 = entry.acc1;
-    $scope.selectedAcc2 = entry.acc2;
-    $scope.description = entry.description;
-    $scope.sum = entry.sum;
-  }
+  $scope.setEntryModified = function (isModified) {
+    $scope.entryModified = isModified;
+  };
 
-  function lockForm (isLocked) {
-    $scope.isFormLocked = isLocked;
-  }
-
-  function showEditAndDeleteButtons (isShown) {
-    $scope.isEditButtonsVisible = isShown;
-  }
-
-  $scope.categoryChanged = function () {
-    alert("hello");
+  function setFocusOnStartElement () {
+    // stub
   }
 }]);
