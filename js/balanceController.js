@@ -1,13 +1,5 @@
 var financeApp = angular.module('financeApp');
 
-function Entry (category, description, acc1, acc2, sum) {
-  this.category = category;
-  this.acc1 = acc1;
-  this.acc2 = acc2;
-  this.description = description;
-  this.sum = sum;
-}
-
 function Category (name, color, isSpecial) {
   this.name = name;
   this.color = color; 
@@ -66,22 +58,9 @@ function getRandomIntNumber (max, min) {
   return min + Math.round(Math.random()*max);
 }
 
-function loadEntries (amount) {
-  var result = [];
-  var categories = loadCategories();
-  for (var i = 0; i < amount; i++) {
-    // result.push(new Entry(
-    //   categories[getRandomIntNumber(categories.length)]
-
-    // ));
-  }
-  return result;
-}
-
 financeApp.controller('BalanceController', ['$scope', 'entryService', function ($scope, entryService) {
   (function init () {
-    // Datepicker init
-
+    // datepicker
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
@@ -113,6 +92,9 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
     entryService.add(today, "Еда", "Кошелек", "", "Столовая", -100);
     entryService.add(today, "Перевод", "Зп карточка", "Кошелек", "", -200);
     entryService.add(today, "Транспорт", "Кошелек", "", "", -20);
+
+    $scope.acc2Visible = false;
+    $scope.isEditButtonsVisible = false;
   })();
 
   $scope.accounts = ["Кошелек", "Карта", "Домашние наличные"];
@@ -128,16 +110,7 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
   $scope.selectedAcc1 = emptyAccount;  
   $scope.selectedAcc2 = emptyAccount;  
 
-  $('#accountName2').parent().addClass('hidden');
-
-  // $scope.entries = [
-  //   new Entry(new Category('Еда', 'green', false), 'Столовая', 'Кошелек', '-100'),
-  //   new Entry(new Category('Транспорт', 'yellow', false), 'Кошелек', '', '-40')
-  // ];
   $scope.entries = entryService.get();
-
-
-
 
   $scope.getAccountState = function(account){  
     return 100;
@@ -145,11 +118,7 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
 
   $scope.categorySelected = function(category){
     $scope.selectedCategory = category;
-    if (category.name == 'Перевод') {
-      $('#accountName2').parent().removeClass('hidden');
-    } else {
-      $('#accountName2').parent().addClass('hidden');
-    }
+    $scope.acc2Visible = (category.name == 'Перевод');
   }
 
   $scope.account1Selected = function (account) {
@@ -172,19 +141,41 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
     refreshTable();
   }
 
-  $scope.selectEntry = function (entry, event) {
+  $scope.selectEntry = function (entry) {
     clearSelection();
-    entry.selected = true;
+    if (entry) {
+      entry.selected = true;
+      fillForm(entry);
+      lockForm(true);
+      showEditAndDeleteButtons(true);
+    }
   }
 
-  function clearSelection () {
-    $(".entry-table-row").removeClass("selected");
+  function clearSelection (selectedEntry) {
     for (var i = 0; i < $scope.entries.length; i++) {
-      $scope.entries[i].selected = false;
+      if ($scope.entries[i] != selectedEntry) {
+        $scope.entries[i].selected = false;
+      }
     };
   }
 
   function refreshTable () {
     $scope.entries = entryService.get();
+  }
+
+  function fillForm (entry) {
+    $scope.categorySelected({name : entry.category});
+    $scope.selectedAcc1 = entry.acc1;
+    $scope.selectedAcc2 = entry.acc2;
+    $scope.description = entry.description;
+    $scope.sum = entry.sum;
+  }
+
+  function lockForm (isLocked) {
+    $scope.isFormLocked = isLocked;
+  }
+
+  function showEditAndDeleteButtons (isShown) {
+    $scope.isEditButtonsVisible = isShown;
   }
 }]);

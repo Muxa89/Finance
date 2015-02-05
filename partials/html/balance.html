@@ -12,7 +12,7 @@
           <div class="row">
             <!-- Категория платежа -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="1">
+              <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="1" ng-disabled="isFormLocked">
                 {{selectedCategory.name}}
                 <span class="caret"></span>
               </button>
@@ -24,7 +24,7 @@
             </div>
             <!-- Основной счет -->
             <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="3">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="3" ng-disabled="isFormLocked">
                 {{selectedAcc1}}
                 <span class="caret"></span>
               </button>
@@ -35,8 +35,8 @@
               </ul>
             </div>
             <!-- Дополнительный счет -->
-            <div class="dropdown col-sm-4">
-              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="5">
+            <div class="dropdown col-sm-4" ng-show="acc2Visible">
+              <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="5" ng-disabled="isFormLocked">
                 {{selectedAcc2}}
                 <span class="caret"></span>
               </button>
@@ -51,24 +51,24 @@
           <!-- Описание операции -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7" ng-model="description"/>
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7" ng-model="description" ng-disabled="isFormLocked"/>
             </div>
           </div>
           <!-- Сумма -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8" ng-model="sum"/>
+              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8" ng-model="sum" ng-disabled="isFormLocked"/>
             </div>
           </div>
           <!-- Кнопки CRUD -->
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-4" ng-hide="isEditButtonsVisible">
               <button type="button" class="btn btn-success" tabindex="9" ng-click="addEntry()">Добавить</button>
             </div>
-            <div class="col-sm-4 hidden">
+            <div class="col-sm-4" ng-show="isEditButtonsVisible">
               <button type="button" class="btn btn-warning" tabindex="10">Изменить</button>
             </div>
-            <div class="col-sm-4 hidden">
+            <div class="col-sm-4" ng-show="isEditButtonsVisible">
               <button type="button" class="btn btn-danger" tabindex="11">Удалить</button>
             </div>
           </div>
