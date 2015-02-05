@@ -13,7 +13,7 @@
             <!-- Категория платежа -->
             <div class="dropdown col-sm-4">
               <button class="btn btn-default dropdown-toggle" type="button" id="categoryDd" data-toggle="dropdown" tabindex="1" ng-disabled="isFormLocked">
-                {{selectedCategory.name}}
+                {{selectedEntry.category.name}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="categoryDd">
@@ -25,24 +25,24 @@
             <!-- Основной счет -->
             <div class="dropdown col-sm-4">
               <button class="btn btn-default dropdown-toggle" type="button" id="accountName1" data-toggle="dropdown" tabindex="3" ng-disabled="isFormLocked">
-                {{selectedAcc1}}
+                {{selectedEntry.acc1.name}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName1">
                 <li ng-repeat="account in accounts" role="presentation" fin-select="account1Selected(account)">
-                  <a role="menuitem" tabindex="4">{{account}}</a>
+                  <a role="menuitem" tabindex="4">{{account.name}}</a>
                 </li>
               </ul>
             </div>
             <!-- Дополнительный счет -->
             <div class="dropdown col-sm-4" ng-show="acc2Visible">
               <button class="btn btn-default dropdown-toggle" type="button" id="accountName2" data-toggle="dropdown" tabindex="5" ng-disabled="isFormLocked">
-                {{selectedAcc2}}
+                {{selectedEntry.acc2.name}}
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu" aria-labelledby="accountName2">
                 <li ng-repeat="account in accounts | filter : notEqualAcc1" role="presentation" fin-select="account2Selected(account)">
-                  <a role="menuitem" tabindex="6">{{account}}</a>
+                  <a role="menuitem" tabindex="6">{{account.name}}</a>
                 </li>
               </ul>
             </div>
@@ -51,13 +51,15 @@
           <!-- Описание операции -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7" ng-model="description" ng-disabled="isFormLocked"/>
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Описание операции" tabindex="7" 
+                ng-model="selectedEntry.description" ng-disabled="isFormLocked"/>
             </div>
           </div>
           <!-- Сумма -->
           <div class="row">
             <div class="col-sm-12">
-              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8" ng-model="sum" ng-disabled="isFormLocked"/>
+              <input type="number" step="0.01" class="form-control" id="exampleInputEmail2" placeholder="Сумма" tabindex="8" 
+                ng-model="selectedEntry.sum" ng-disabled="isFormLocked"/>
             </div>
           </div>
           <!-- Кнопки CRUD -->
@@ -65,11 +67,14 @@
             <div class="col-sm-4" ng-hide="isEditButtonsVisible">
               <button type="button" class="btn btn-success" tabindex="9" ng-click="addEntry()">Добавить</button>
             </div>
-            <div class="col-sm-4" ng-show="isEditButtonsVisible">
-              <button type="button" class="btn btn-warning" tabindex="10">Изменить</button>
-            </div>
+            <!-- <div class="col-sm-4" ng-show="isEditButtonsVisible">
+              <button type="button" class="btn btn-warning" tabindex="10" ng-click="editEntry()">Изменить</button>
+            </div> -->
             <div class="col-sm-4" ng-show="isEditButtonsVisible">
               <button type="button" class="btn btn-danger" tabindex="11">Удалить</button>
+            </div>
+            <div class="col-sm-4" ng-show="entryModified">
+              <button type="button" class="btn btn-default" tabindex="11">Отмена</button>
             </div>
           </div>
         </div>
@@ -85,8 +90,8 @@
           </thead>
           <tbody>
             <tr ng-repeat="account in accounts">
-              <td>{{account}}</td>
-              <td>{{getAccountState(account)}}</td>
+              <td>{{account.name}}</td>
+              <td>{{account.state}}</td>
             </tr>
           </tbody>
         </table>
@@ -108,9 +113,9 @@
           </thead>
           <tbody>
             <tr ng-repeat="entry in entries" class="entry-table-row" ng-click="selectEntry(entry)" ng-class="{selected : entry.selected}">
-              <td>{{entry.category}}</td>
+              <td>{{entry.category.name}}</td>
               <td>{{entry.description}}</td>
-              <td>{{entry.acc1}}  <span ng-show="entry.acc2" class="glyphicon glyphicon-arrow-right"></span>  {{entry.acc2}}</td>
+              <td>{{entry.acc1.name}}  <span ng-show="entry.acc2" class="glyphicon glyphicon-arrow-right"></span>  {{entry.acc2.name}}</td>
               <td>{{entry.sum}}</td>
             </tr>
           </tbody>

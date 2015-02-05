@@ -1,64 +1,6 @@
 var financeApp = angular.module('financeApp');
 
-function Category (name, color, isSpecial) {
-  this.name = name;
-  this.color = color; 
-  this.isSpecial = isSpecial;
-}
-
-function AccountStore () {
-  this.accounts = {};
-
-  AccountStore.addAccount = function (name, startState) {
-    accounts[name] = startState;
-  }
- 
-  AccountStore.addAccount('Карточка', 0);
-  AccountStore.addAccount('Кошелек', 0);
-  AccountStore.addAccount('Домашние наличные', 0);
-
-  AccountStore.getAccounts = function () {
-    return accounts;
-  }
-}
-
-Category.loadSpecialCategories = function() {
-  return [
-    new Category('Стартовый баланс', 'gray', true),
-    new Category('Перевод', 'gray', true),
-    new Category('Корректировка', 'gray', true)
-  ];
-}
-
-Category.getCategoryByName = function (name) {
-  if (!Category.categoriesLoaded) loadCategories();
-  return Category[name];
-}
-
-function loadCategories() {
-  var allCategories = [
-    new Category('Еда', 'green', false),
-    new Category('Медицина', 'red', false),
-    new Category('Квартира', 'blue', false),
-    new Category('Транспорт', 'yellow', false)
-  ].concat(Category.loadSpecialCategories());
-  for (var i = 0; i < allCategories.length; i++) {
-    Category[allCategories[i].name] = allCategories[i];
-  }
-  Category.categoriesLoaded = true;
-  return allCategories;
-}
-
-function loadAccounts () {
-  
-}
-
-function getRandomIntNumber (max, min) {
-  if (!min) min = 0;
-  return min + Math.round(Math.random()*max);
-}
-
-financeApp.controller('BalanceController', ['$scope', 'entryService', function ($scope, entryService) {
+financeApp.controller('BalanceController', ['$scope', 'entryService', 'categoryService', 'accountsService', function ($scope, entryService, categoryService, accountsService) {
   (function init () {
     // datepicker
     var today = new Date();
@@ -87,44 +29,55 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
       autoclose: true
     });
     $('#datepicker').datepicker('update', today);
-
-    // Тестовые записи
-    entryService.add(today, "Еда", "Кошелек", "", "Столовая", -100);
-    entryService.add(today, "Перевод", "Зп карточка", "Кошелек", "", -200);
-    entryService.add(today, "Транспорт", "Кошелек", "", "", -20);
-
     $scope.acc2Visible = false;
     $scope.isEditButtonsVisible = false;
+
+    $scope.entryModified = false;
+
+    // Тестовые записи
+    categoryService.add(new Category('Стартовый баланс', 'gray', true));
+    categoryService.add(new Category('Перевод', 'gray', true));
+    categoryService.add(new Category('Корректировка', 'gray', true));
+    categoryService.add(new Category('Еда', 'green', false));
+    categoryService.add(new Category('Медицина', 'red', false));
+    categoryService.add(new Category('Квартира', 'blue', false));
+    categoryService.add(new Category('Транспорт', 'yellow', false));
+
+    accountsService.add(new Account('Кошелек', 100));
+    accountsService.add(new Account('Карта', 200));
+    accountsService.add(new Account('Домашние наличные', 300));
+
+    entryService.add(new Entry(today, categoryService.get({name:"Еда"}), accountsService.get({name:"Кошелек"}), "", "Столовая", -100));
+    entryService.add(new Entry(today, categoryService.get({name:"Перевод"}), accountsService.get({name:"Домашние наличные"}), accountsService.get({name:"Кошелек"}), "", -200));
+    entryService.add(new Entry(today, categoryService.get({name:"Транспорт"}), accountsService.get({name:"Кошелек"}), "", "", -20));
+
+    // Инициализация коллекций и текущих выбранных элементов
+
+    $scope.entries = entryService.get();
+    $scope.selectedEntry = entryService.getEmptyEntry().clone();
+
+    $scope.categories = categoryService.get();
+    $scope.selectedCategory = categoryService.getEmptyCategory();
+
+    $scope.accounts = accountsService.get();
+    $scope.selectedAcc1 = accountsService.getEmptyAccount();  
+    $scope.selectedAcc2 = accountsService.getEmptyAccount();  
   })();
-
-  $scope.accounts = ["Кошелек", "Карта", "Домашние наличные"];
-  // for (var name in AccountStore.getAccounts()) {
-  //   $scope.accounts.push(name);
-  // }
-
-  $scope.categories = loadCategories();
-  var emptyCategory = new Category('Категория', '', '');
-  $scope.selectedCategory = emptyCategory;
-
-  var emptyAccount = 'Счет';
-  $scope.selectedAcc1 = emptyAccount;  
-  $scope.selectedAcc2 = emptyAccount;  
-
-  $scope.entries = entryService.get();
 
   $scope.getAccountState = function(account){  
     return 100;
   }
 
   $scope.categorySelected = function(category){
-    $scope.selectedCategory = category;
+    $scope.selectedEntry.category = category;
     $scope.acc2Visible = (category.name == 'Перевод');
+    //if ($scope.selectedEntry.id != -1) $scope.entryModified = true;
   }
 
   $scope.account1Selected = function (account) {
-    $scope.selectedAcc1 = account;
+    $scope.selectedEntry.acc1 = account;
     if ($scope.selectedAcc1 == $scope.selectedAcc2) {
-      $scope.selectedAcc2 = emptyAccount;
+      $scope.selectedAcc2 = accountsService.getEmptyAccount();
     }
   }
 
@@ -137,7 +90,9 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
   }
 
   $scope.addEntry = function () {
-    entryService.add($('#datepicker').val(), $scope.selectedCategory.name, $scope.selectedAcc1, $scope.selectedAcc2, $scope.description, $scope.sum);
+    if ($scope.selectedEntry.equals(entryService.getEmptyEntry())) return;
+    $scope.selectedEntry.date = $('#datepicker').val();
+    entryService.add($scope.selectedEntry);
     refreshTable();
   }
 
@@ -146,16 +101,20 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
     if (entry) {
       entry.selected = true;
       fillForm(entry);
-      lockForm(true);
       showEditAndDeleteButtons(true);
     }
+    $scope.selectedEntry = entry;
+    $scope.entryModified = false;
   }
 
-  function clearSelection (selectedEntry) {
+  $scope.editEntry = function (entry) {
+    lockForm(false);
+
+  }
+
+  function clearSelection () {
     for (var i = 0; i < $scope.entries.length; i++) {
-      if ($scope.entries[i] != selectedEntry) {
-        $scope.entries[i].selected = false;
-      }
+      $scope.entries[i].selected = false;
     };
   }
 
@@ -177,5 +136,9 @@ financeApp.controller('BalanceController', ['$scope', 'entryService', function (
 
   function showEditAndDeleteButtons (isShown) {
     $scope.isEditButtonsVisible = isShown;
+  }
+
+  $scope.categoryChanged = function () {
+    alert("hello");
   }
 }]);
